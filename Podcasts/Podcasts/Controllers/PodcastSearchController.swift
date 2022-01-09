@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class PodcastSearchController: UITableViewController {
     
@@ -67,5 +68,16 @@ extension PodcastSearchController: UISearchBarDelegate {
     // This func will notify whenever we type something on searchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
+        let url = "https://itunes.apple.com/search?term=\(searchText)"
+        AF.request(url).responseData { (dataResponse) in
+            if let err = dataResponse.error {
+                print("Failed to connect yahoo", err)
+                return
+            }
+            
+            guard let data = dataResponse.data else { return }
+            let dummyString = String(data: data, encoding: .utf8)
+            print(dummyString ?? "")
+        }
     }
 }
