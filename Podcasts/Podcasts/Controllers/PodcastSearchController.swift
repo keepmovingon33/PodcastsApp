@@ -10,9 +10,9 @@ import Alamofire
 
 class PodcastSearchController: UITableViewController {
     
-    let dummyPodcasts = [
-        Podcast(name: "Swift UIKit", artistName: "Andy"),
-        Podcast(name: "SwiftUI", artistName: "Daniel")
+    var podcasts = [
+        Podcast(trackName: "Swift UIKit", artistName: "Andy"),
+        Podcast(trackName: "SwiftUI", artistName: "Daniel")
     ]
     
     let cellId = "cellId"
@@ -47,16 +47,21 @@ class PodcastSearchController: UITableViewController {
     // MARK:- UITableView Datasource Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dummyPodcasts.count
+        return podcasts.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
         
-        cell.textLabel?.text = "\(dummyPodcasts[indexPath.row].name) \n \(dummyPodcasts[indexPath.row].artistName)"
+        cell.textLabel?.text = "\(podcasts[indexPath.row].trackName ?? "")  \n \(podcasts[indexPath.row].artistName ?? "")"
         cell.imageView?.image = #imageLiteral(resourceName: "icPodcast")
         cell.textLabel?.numberOfLines = -1
         return cell
+    }
+    
+    struct SearchResult: Decodable {
+        let resultCount: Int
+        let results: [Podcast]
     }
 }
 
@@ -68,16 +73,30 @@ extension PodcastSearchController: UISearchBarDelegate {
     // This func will notify whenever we type something on searchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         print(searchText)
-        let url = "https://itunes.apple.com/search?term=\(searchText)"
-        AF.request(url).responseData { (dataResponse) in
+        
+        // original url: url = "https://itunes.apple.com/search?term=\(searchText)"
+        
+        let url = "https://itunes.apple.com/search"
+        // we have an issue. When we search "Brian Voong", the url will have a space, which will only fetch the keyword Brian, not Brian Voong as we wanted. So we fix it by doing this:
+        // encoding: URLEncongding.default se giup convert space "Brian Voong" thanh "Brian+voong"
+        let parameters = ["term": searchText]
+        AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
             if let err = dataResponse.error {
                 print("Failed to connect yahoo", err)
                 return
             }
             
             guard let data = dataResponse.data else { return }
-            let dummyString = String(data: data, encoding: .utf8)
-            print(dummyString ?? "")
+            
+            do {
+                let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
+                searchResult.results.forEach { [weak self] (pod) in
+                    self?.podcasts = searchResult.results
+                    self?.tableView.reloadData()
+                }
+            } catch let err {
+               print("Failed to decode:", err)
+            }
         }
     }
 }
