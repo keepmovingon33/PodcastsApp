@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		335AC83F278DAA6000E3D52E /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AC83E278DAA6000E3D52E /* APIService.swift */; };
+		335AC842278DB83500E3D52E /* PodcastCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 335AC841278DB83500E3D52E /* PodcastCell.xib */; };
+		335AC844278DBB0D00E3D52E /* PodcastCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335AC843278DBB0D00E3D52E /* PodcastCell.swift */; };
 		33FBD6B9278AF31900D041B1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBD6B8278AF31900D041B1 /* AppDelegate.swift */; };
 		33FBD6BB278AF31900D041B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBD6BA278AF31900D041B1 /* SceneDelegate.swift */; };
 		33FBD6BD278AF31900D041B1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33FBD6BC278AF31900D041B1 /* ViewController.swift */; };
@@ -20,6 +23,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		335AC83E278DAA6000E3D52E /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		335AC841278DB83500E3D52E /* PodcastCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PodcastCell.xib; sourceTree = "<group>"; };
+		335AC843278DBB0D00E3D52E /* PodcastCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastCell.swift; sourceTree = "<group>"; };
 		33FBD6B5278AF31900D041B1 /* Podcasts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcasts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33FBD6B8278AF31900D041B1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		33FBD6BA278AF31900D041B1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +54,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		335AC83C278DAA4C00E3D52E /* API */ = {
+			isa = PBXGroup;
+			children = (
+				335AC83E278DAA6000E3D52E /* APIService.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		335AC840278DB7CE00E3D52E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				335AC841278DB83500E3D52E /* PodcastCell.xib */,
+				335AC843278DBB0D00E3D52E /* PodcastCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		33FBD6AC278AF31900D041B1 = {
 			isa = PBXGroup;
 			children = (
@@ -70,7 +93,9 @@
 			isa = PBXGroup;
 			children = (
 				33FBD6F1278B14EB00D041B1 /* Model */,
+				335AC840278DB7CE00E3D52E /* View */,
 				33FBD6CE278B01FE00D041B1 /* Controllers */,
+				335AC83C278DAA4C00E3D52E /* API */,
 				33FBD6B8278AF31900D041B1 /* AppDelegate.swift */,
 				33FBD6BA278AF31900D041B1 /* SceneDelegate.swift */,
 				33FBD6BE278AF31900D041B1 /* Main.storyboard */,
@@ -105,7 +130,6 @@
 				59A8F0688632CABE73E0706C /* Pods-Podcasts.debug.xcconfig */,
 				942815E7345BE521B1DA782E /* Pods-Podcasts.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -178,6 +202,7 @@
 			files = (
 				33FBD6C5278AF31B00D041B1 /* LaunchScreen.storyboard in Resources */,
 				33FBD6C2278AF31B00D041B1 /* Assets.xcassets in Resources */,
+				335AC842278DB83500E3D52E /* PodcastCell.xib in Resources */,
 				33FBD6C0278AF31900D041B1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,6 +257,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				33FBD6BD278AF31900D041B1 /* ViewController.swift in Sources */,
+				335AC83F278DAA6000E3D52E /* APIService.swift in Sources */,
+				335AC844278DBB0D00E3D52E /* PodcastCell.swift in Sources */,
 				33FBD6B9278AF31900D041B1 /* AppDelegate.swift in Sources */,
 				33FBD6F3278B14FE00D041B1 /* Podcast.swift in Sources */,
 				33FBD6F0278B14AE00D041B1 /* PodcastSearchController.swift in Sources */,

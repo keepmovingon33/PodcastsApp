@@ -10,12 +10,9 @@ import Alamofire
 
 class PodcastSearchController: UITableViewController {
     
-    var podcasts = [
-        Podcast(trackName: "Swift UIKit", artistName: "Andy"),
-        Podcast(trackName: "SwiftUI", artistName: "Daniel")
-    ]
+    var podcasts = [Podcast]()
     
-    let cellId = "cellId"
+    let cellId = "CellId"
     
     // lets implement a UISearchController
     let searchController = UISearchController(searchResultsController: nil)
@@ -40,7 +37,10 @@ class PodcastSearchController: UITableViewController {
     
     private func setupTableView() {
         // 1. register a cell for our tableview
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.tableFooterView = UIView()
+        let nib = UINib(nibName: "PodcastCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: cellId)
     }
     
     
@@ -51,17 +51,24 @@ class PodcastSearchController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! PodcastCell
         
-        cell.textLabel?.text = "\(podcasts[indexPath.row].trackName ?? "")  \n \(podcasts[indexPath.row].artistName ?? "")"
-        cell.imageView?.image = #imageLiteral(resourceName: "icPodcast")
-        cell.textLabel?.numberOfLines = -1
+        let podcast = self.podcasts[indexPath.row]
+        cell.podcast = podcast
+        
         return cell
     }
     
-    struct SearchResult: Decodable {
-        let resultCount: Int
-        let results: [Podcast]
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = "Please enter a Search Term"
+        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        return label
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 250
     }
 }
 
@@ -72,31 +79,11 @@ extension PodcastSearchController: UISearchBarDelegate {
     
     // This func will notify whenever we type something on searchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
-        
-        // original url: url = "https://itunes.apple.com/search?term=\(searchText)"
-        
-        let url = "https://itunes.apple.com/search"
-        // we have an issue. When we search "Brian Voong", the url will have a space, which will only fetch the keyword Brian, not Brian Voong as we wanted. So we fix it by doing this:
-        // encoding: URLEncongding.default se giup convert space "Brian Voong" thanh "Brian+voong"
-        let parameters = ["term": searchText]
-        AF.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: nil).responseData { (dataResponse) in
-            if let err = dataResponse.error {
-                print("Failed to connect yahoo", err)
-                return
-            }
-            
-            guard let data = dataResponse.data else { return }
-            
-            do {
-                let searchResult = try JSONDecoder().decode(SearchResult.self, from: data)
-                searchResult.results.forEach { [weak self] (pod) in
-                    self?.podcasts = searchResult.results
-                    self?.tableView.reloadData()
-                }
-            } catch let err {
-               print("Failed to decode:", err)
-            }
+        APIService.shared.fetchPodcasts(searchText: searchText) { [weak self] podcasts in
+            self?.podcasts = podcasts
+            self?.tableView.reloadData()
         }
+        
+       
     }
 }
