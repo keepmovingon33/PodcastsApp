@@ -25,6 +25,11 @@ class PodcastSearchController: UITableViewController {
     }
     
     private func setupSearchBar() {
+        
+        // khi push 1 viewcontroller moi, no ko hien len title cua viewcontroller,
+        // thi viet cau lenh nay de khac phuc. con neu work well roi thi ko can
+//        self.definesPresentationContext = false
+        
         navigationItem.searchController = searchController
         // Make searchController always appears on VC
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -36,7 +41,7 @@ class PodcastSearchController: UITableViewController {
     }
     
     private func setupTableView() {
-        // 1. register a cell for our tableview
+        // 1. register a cell for our tableview, lúc mình chưa cần tạo 1 tablecell rieng
 //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         tableView.tableFooterView = UIView()
         let nib = UINib(nibName: "PodcastCell", bundle: nil)
@@ -67,8 +72,16 @@ class PodcastSearchController: UITableViewController {
         return label
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let episodeController = EpisodeController()
+        let podcast = self.podcasts[indexPath.row]
+        episodeController.podcast = podcast
+        navigationController?.pushViewController(episodeController, animated: true)
+        print(indexPath.row)
+    }
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 250
+        return podcasts.count > 0 ? 0 : 250
     }
 }
 

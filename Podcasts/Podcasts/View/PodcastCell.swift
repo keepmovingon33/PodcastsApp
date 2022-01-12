@@ -20,7 +20,6 @@ class PodcastCell: UITableViewCell {
             trackNameLabel.text = podcast.trackName
             artistNameLabel.text = podcast.artistName
             episodeCountLabel.text = "\(podcast.trackCount ?? 0) Episodes"
-            print("Loading image with url: ", podcast.artworkUrl600 ?? "")
             
             guard let url = URL(string: podcast.artworkUrl600 ?? "") else { return }
             
@@ -31,6 +30,7 @@ class PodcastCell: UITableViewCell {
 //                }
 //            }.resume()
             
+            // dung cache de khoi phai load nhieu lan
             podcastImageView.sd_setImage(with: url, completed: nil)
         }
     }
