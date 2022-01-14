@@ -23,37 +23,12 @@ class EpisodeController: UITableViewController {
         
         guard let feedUrl = podcast?.feedUrl else { return }
         
-        let secureFeedUrl = feedUrl.contains("https") ? feedUrl : feedUrl.replacingOccurrences(of: "http", with: "https")
-        
-        guard let url = URL(string: secureFeedUrl) else { return }
-        
-        // Because feedURL is not JSON format. It is XML format. We need to use FeedKit to parse data from XML
-        let parser = FeedParser(URL: url)
-        parser?.parseAsync(result: { (result) in
-            print("Successfully parse feed:", result.isSuccess)
-            
-            // associative enumeration values
-            switch result {
-                case let .rss(feed):        // Really Simple Syndication Feed Model
-                    
-                    var episodes = [Episode]() // blank Episode
-                    
-                    feed.items?.forEach({ (feedItem) in
-                        let episode = Episode(feedItem: feedItem)
-                        episodes.append(episode)
-                    })
-                    self.episodes = episodes
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                    break
-                case let .failure(error):
-                    print("Failed to parse feed:", error)
-                    break
-            default:
-                print("Found a feed")
-                }
-        })
+        APIService.shared.fetchEpisodes(feedUrl: feedUrl) { (episodes) in
+            self.episodes = episodes
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
     private var cellId = "EpisodeCell"

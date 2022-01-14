@@ -26,7 +26,7 @@ struct Episode {
     let pubDate: Date
     let description: String
     
-    let imageUrl: String?
+    var imageUrl: String?
     
     // because we fetch episode data from RSS XML, not JSON, that's why we have RSSFeedItem here
     init(feedItem: RSSFeedItem) {
