@@ -22,6 +22,10 @@ class PodcastSearchController: UITableViewController {
         
         setupSearchBar()
         setupTableView()
+        
+        
+        // we automatically search "Voong" on the searchBar
+        searchBar(searchController.searchBar, textDidChange: "Voong")
     }
     
     private func setupSearchBar() {
